@@ -11,7 +11,28 @@ namespace HarborSimulator
 {
     internal interface HarborSimulation
     {
-        void CreateHarbor(int Docks, int UnloadingPlaces, int WaitingPlaces, ); 
+        void CreateDock(int number);
+
+        void CreateUnloadingSpot(int number);
+        // Gjelder både unloading og loading av containers
+
+        void CreateWaitingSpot(int number);
+
+        void CreateContainers(int number);
+
+        void CreateCrane(int number);
+
+        void CreateContainerSpot(int number);
+
+        void ContainerSpotAvailable(Boolean free);
+
+        void UnloadContainersTo(int range, unloadingspot, crane);
+
+        void LoadContainersTo(int range, containerspot);
+        
+
+
+
         /// <summary>
         /// Runs the simulation to start a sailing at a specific time. 
         /// </summary>
