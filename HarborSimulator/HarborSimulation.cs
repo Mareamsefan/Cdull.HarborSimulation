@@ -10,9 +10,9 @@ using System.Xml.Serialization;
 namespace HarborSimulator
 {
     internal interface HarborSimulation
-    {
+    { 
         void CreateDock(int number);
-
+        
         void CreateUnloadingSpot(int number);
         // Gjelder både unloading og loading av containers
 
@@ -26,9 +26,9 @@ namespace HarborSimulator
 
         void ContainerSpotAvailable(Boolean free);
 
-        void UnloadContainersTo(int range, unloadingspot, crane);
+       // void UnloadContainersTo(int range, unloadingspot, crane);
 
-        void LoadContainersTo(int range, containerspot);
+        //void LoadContainersTo(int range, containerspot);
         
 
 
@@ -39,7 +39,7 @@ namespace HarborSimulator
         /// <param name="datatime">The time in days and hours</param>
         void Sailing(DataSetDateTime datatime, String model);
 
-        void RecurringSailing(Sailing sailing, Boolean weekly, Boolean daily);
+        //void RecurringSailing(Sailing sailing, Boolean weekly, Boolean daily);
 
         void Docking(String model); 
 
@@ -49,4 +49,5 @@ namespace HarborSimulator
 
 
     }
+   
 }
