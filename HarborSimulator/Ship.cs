@@ -11,6 +11,7 @@ namespace HarborSimulator
         public String Name { get; }
         public bool Docked { get; private set; }
         public Cargo cargo { get; private set; }
+        public String Size { get; private set; }
 
         public Ship(String name)
         {

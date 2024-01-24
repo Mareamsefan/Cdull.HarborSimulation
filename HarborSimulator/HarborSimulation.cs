@@ -26,7 +26,7 @@ namespace HarborSimulator
 
         void ContainerSpotAvailable(Boolean free);
 
-       // void UnloadContainersTo(int range, unloadingspot, crane);
+        void UnloadContainersTo(int range, unloadingspot, crane);
 
         //void LoadContainersTo(int range, containerspot);
         
