@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,9 +22,10 @@ namespace HarborSimulator
             Docked = false;
             cargo = null; 
         }
-        public void DockAt(Dock dock)
+        public Dock DockAt(Dock dock, DataSetDateTime datatime)
         {
-            Docked = true; 
+            Docked = true;
+            return dock;
         }
         public void LoadCargo(Cargo cargo)
         {

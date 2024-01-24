@@ -13,12 +13,16 @@ namespace HarborSimulator
     {
         // Krav 1
 
+        // Scenario 0: Creating the harbor that is to be simulated
+        // Harbor harbor = new Harbor(DockList, CargoList, ShipList);
+        public Harbor(List<Dock> DockList, List<Cargo> CargoList, List<Ship> ShipList);
+
         // Scenario 1: Creating a dock with name and size
         // Dock(KrissHavn, Medium)
         public Dock(String name, String size);
 
         // Scenario 2: Adding the created dock to harbor
-        //
+        // kode
         public void AddDock(Dock dock);
 
         // Scenario 3: Create a piece of cargo
@@ -28,13 +32,13 @@ namespace HarborSimulator
         public CargoHandlingDock(int number);
 
         // Scenario 5: Create a queue for waiting ships
-        void CreateQueue(List<Ship>);
+        void CreateShipQueue(List<Ship> ShipList);
 
         // Scenario 6: Create a crane that moves cargo at a certain unloading/loading dock
         public Crane(String name, CargoHandlingDock cargoHandlingDock);
 
         // Scenario 7: Creating a number of spots for cargo to wait
-        public CargoSpot(int number);
+        void CargoSpot(int number);
 
         // Scenario 8: Checks if a cargo spot is available or not
         void CargoSpotAvailable(Boolean free);
@@ -62,15 +66,27 @@ namespace HarborSimulator
         // Krav 3
 
         // Scenario 1: Initiates docking for a ship 
-        void Docking(Dock dock, Ship ship, DataSetDateTime datatime);
+        void DockAt(Dock dock, DataSetDateTime datatime);
 
-        // Scenario 2: Saving ship history to a json file
-        void SaveToJSONFile();
+        // Krav 4
 
-        // Scenario 3: Reads ship history from a json file
-        void ReadFromJSONFile();
+        // Scenario 1: Saving ship history to a json file
+        void SaveShipToJSONFile(Ship ship);
 
+        // Scenario 2: Reads ship history from a json file
+        void ReadShipFromJSONFile(String filename);
 
+        // Krav 5
+
+        // Scenario 1: Saving cargo history to a json file
+        void SaveCargoToJSONFile(Cargo cargo);
+
+        // Scenario 2: Reads cargo history from a json file
+        void ReadCargoFromJSONFile(String filename);
+
+        // Krav 6
+
+        void AddToQueue(Ship ship, List<Ship> ShipList);
 
 
 
