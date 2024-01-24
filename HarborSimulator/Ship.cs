@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,15 +14,19 @@ namespace HarborSimulator
         public Cargo cargo { get; private set; }
         public String Size { get; private set; }
 
-        public Ship(String name)
+        public String Size { get; private set; }
+
+        public Ship(String name, String size)
         {
             Name = name;
+            Size = size;
             Docked = false;
             cargo = null; 
         }
-        public void DockAt(Dock dock)
+        public Dock DockAt(Dock dock, DataSetDateTime datatime)
         {
-            Docked = true; 
+            Docked = true;
+            return dock;
         }
         public void LoadCargo(Cargo cargo)
         {
