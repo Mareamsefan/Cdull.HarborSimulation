@@ -12,9 +12,12 @@ namespace HarborSimulator
         public bool Docked { get; private set; }
         public Cargo cargo { get; private set; }
 
-        public Ship(String name)
+        public String Size { get; private set; }
+
+        public Ship(String name, String size)
         {
             Name = name;
+            Size = size;
             Docked = false;
             cargo = null; 
         }
