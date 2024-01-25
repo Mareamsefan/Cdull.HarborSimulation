@@ -14,7 +14,8 @@ namespace HarborSimulator
         public Cargo cargo { get; private set; }
         public String Size { get; private set; }
 
-        public String Size { get; private set; }
+        public List<String> HistoryList { get; private set; } 
+
 
         public Ship(String name, String size)
         {
