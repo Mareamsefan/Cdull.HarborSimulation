@@ -38,7 +38,7 @@ namespace Cdull.HarborSimulation
          *    Dock dock1 = new Dock("dock1", "small", "berths", new Crane()/crane); 
          */
         // Requriement 6 --> handeling conflicts by adding IsAvalible
-        public void Dock(String name, String size, String dockType, Crane crane, bool IsAvalible=true);
+        public void Dock(String name, String size, String dockType, bool IsAvalible=true);
 
 
        
@@ -69,6 +69,8 @@ namespace Cdull.HarborSimulation
         // Scenario 5: Initializing a crane that can transfer cargos from/to ships. 
         // Requriement 6 --> handeling conflicts by adding IsCraneAvalible
         public void Crane(bool IsCraneAvalible=true, bool IsCraneOutOfFuntion=false);
+
+        //
 
 
 
@@ -111,52 +113,89 @@ namespace Cdull.HarborSimulation
 
         // Scenario 10: Initiate a crane on a dock that moves cargo at a cargoHandelingDock 
 
-        public void Dock(String name, String size, String dockType, Crane crane);
+        public void Dock(String name, String size, String dockType, Crane crane, bool IsAvalible=true);
 
 
+        // Scenario 11:  Initiates if Dock is occupied by a ship and which ship it's occupied by.
 
+        public void Dock(String name, String size, String dockType, Crane crane, bool IsAvalible = true, Ship IsOccupiedBy=null);
 
-        // Scenario 11: Initiates a ships so that they later can be added to harbor 
+        // String size in Ship satisfies requirement 3  
+        // Scenario 12: Initiates a ships so that they later can be added to harbor 
         //dockname does not have to be initiated
 
-        public void Ship(String name, String model, String size, bool HasDocked, List<Cargo> CargoList, List<String> HistoryList, String dockname);
+        public void Ship(String name, String model, String size, bool HasDocked, List<Cargo> CargoList, String dockname);
 
 
 
-        // Scenario 12:  Initializing ships in harbor: 
+        // Scenario 13:  Initializing ships in harbor: 
         // placed in Harbor
 
         void AddShips(Ship ship, List<Ship> ShipList);
-         
+
         
 
+        //Requirement 8 and 1: Structure of harbor and waiting area for cargo
 
-        //void LoadContainersTo(int range, containerspot);
+        // Scenario 14: Creating a number of storage facility for cargo to wait
+        /* Code example: 
+         * Harbor harbor = new Harbor(DockList, CargoList, ShipList, CargoSpotList);
+         * for (int i = 0; i >= number; i++){
+         *     CargoStorageFacility = new CargoStorageFacility("cargo +{i}"); 
+         * }
+        */
+        public void CargoStorageFacility(int number, bool IsAvailable = true);
 
-        // Requriement 2: 
+
+        // Scenario 15: Moving Cargo from ship to cargoStorageFacilitys
+        // Should be placed in Dock class: 
+        void AddCargoToStorage(List<CargoStorageFacility> cargoStorageFacility, List<Cargo> CargoList, Crane crane);
+
+        // Scenario 16: Moving Cargo to ship 
+        // Should be placed in Dock class: 
+        // Code example: 
+        /* In class Dock: 
+         * void MoveCargoTpoShip(Cargo cargo){
+         *      Ship = this.isOccpupiedBy();
+         *      Ship.CargoList.append(Cargo);
+         * };
+         
+         */
+        void MoveCargoToShip(Cargo Cargo);
+
+
+
+        // Requriement 2 and 1: Configuration of sailing and elapsing time when sailing starts
 
         // Scenario 1: Setting up a sailing 
-        public void Sailing(UnicodeEncoding id, DataSetDateTime datatime, Ship ship);
+        // Code example: 
+        /* watch.startCountingTime +++ */
+        public void Sailing(UnicodeEncoding id, DataSetDateTime datatime, Ship ship, Watch watch);
         /* 
          */
 
-
         // Scenario 2: Setting up a recurring sailing, either daily or weekly
+        // code example: 
+        
+      
         void RecurringSailing(Sailing sailing, Boolean Isweekly, Boolean IsDaily);
 
 
-        // Requirement 3: 
+        // Requirement 2 and 1: Configuration of docking, stopping time when docking stops and saving Shiphistory.
 
         // Scenario 1: Initiates docking for a ship and saves history 
-        void DockAt(Dock dock, DataSetDateTime datatime, SaveHistory saveShipHistory);
+        void DockAt(Dock dock, DataSetDateTime datatime, Watch watch);
         /* kode eksempel: 
          * if(Ship.size == dock.size){
             If(dock.IsOccupied is false && ship.docked is false)
             {
                 ship.docked = true;
                 dock.IsOccupied = true;
+                watch.StopCountingTime(); 
+                watch.MeasureTimeElapsed(); 
+                dock.IsOccupiedBy= Ship; 
                 fileName = saveHistory(ship, dock, datatime); 
-                ship.HistoryList.append(fileName); 
+                this.HistoryList.append(fileName); 
 
             }
             else {
@@ -166,10 +205,19 @@ namespace Cdull.HarborSimulation
         */
 
 
-        // Requirement 4: Saving history on ships and Cargos
+        // Requirement 4: Saving and collecting ship history: 
+        // code exapmple
+        delegate void SaveShipHistory();
 
-        delegate void SaveHistory(); 
+        public void Ship(String name, String model, String size, bool HasDocked, List<Cargo> CargoList, List<String> HistoryList, String dockname);
 
+        // Requirement 5: Saving and collecting cargo history: 
+
+
+        delegate void SaveCargoHistory();
+        // to collect history of Cargo, just use the get method for 
+        // Scenario 7: Initializing cargo that can be transfered to/from ship. 
+        public void Cargo(String name, double weight, List<String> HistoryList);
 
         // Requirement 6 og requirement 9: 
 
@@ -191,29 +239,17 @@ namespace Cdull.HarborSimulation
         delegate void StopCountingTime();
 
         //Scenario 4: measure the time that elapsed  
-        void MeasureTimeElapsed(StartCountingTime startCountingTime, StopCountingTime stopCountingTime);
+        delegate void MeasureTimeElapsed(StartCountingTime startCountingTime, StopCountingTime stopCountingTime);
 
 
 
-        //Requirement 8: waiting area for cargo
-
-        // Scenario 1: Creating a number of storage facility for cargo to wait
-        /* Code example: 
-         * Harbor harbor = new Harbor(DockList, CargoList, ShipList, CargoSpotList);
-         * for (int i = 0; i >= number; i++){
-         *     CargoStorageFacility = new CargoStorageFacility("cargo +{i}"); 
-         * }
-        */
+       
 
 
-        public void CargoStorageFacility(int number, bool IsAvailable = true);
+      
 
 
-        // Scenario 2: Moving Cargo from/to cargoStorageFacilitys
-        // 
-        void AddCargoToStorage(List<CargoStorageFacility> cargoStorageFacility, List<Cargo> CargoList, Crane crane);
-
-        void MoveCargoToShip(Ship Ship, Dock dock);
+      
 
 
 
