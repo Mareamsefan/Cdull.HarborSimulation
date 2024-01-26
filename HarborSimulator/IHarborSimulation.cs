@@ -1,96 +1,161 @@
-﻿using System;
+﻿using Cdull.HarborSimulator;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace IHarborSimulator
+namespace Cdull.HarborSimulation
 {
     internal interface IHarborSimulation
     {
-        // Krav 1
+        // -- Requirement 1: Structure of harbor 
 
-        // Scenario 0: Creating the harbor that is to be simulated
-        // Kode eksempel; Harbor harbor = new Harbor(DockList, CargoList, ShipList);
-        /*          harbor.AddDock(); 
+        // Scenario 1: Creating the harbor that is to be simulated
+        // Code example (constructure method): 
+        /*Harbor harbor = new Harbor(DockList, ShipList, ShipQueue, CraneList, cargoStorageFacility);
+         *          harbor.AddDock();
+         *          harbor.AddShips(); 
          *          harbor.CreateShipQueue(); 
-         *          harbor.
+         *          harbor.AddCargoToStorage(); 
+         *          harbor.CreateCranes(); 
          */
-        public Harbor(List<Dock> DockList, List<Cargo> CargoList, List<Ship> ShipList, 
-            List<Crane> CraneList, List<CargoSpot> cargospot);
 
-        // Scenario 1: Creating a dock with name, size and docktype
-        // Dock(KrissHavn, Medium)
-        public Dock(String name, String size, String dockType, int NumberOfCrane);
+        public void Harbor(List<Dock> DockList, List<Ship> ShipList, Queue<Cargo> ShipQueue, 
+            List<Crane> CraneList, List<CargoStorageFacility> cargoStorageFacility);
 
-        // Scenario 2: Adding the created dock to harbor
+
+
+        // Scenario 2: Creating a dock with name, size, docktype and crane 
+        // Mainly there is two docktypes: berths and cargoHandling * 
+        // Code example: 
+        /*    Dock dock1 = new Dock("dock1", "small", "cargoHandling", new Crane()/crane); 
+         *    * berths = docks that does not include cargo handling only docking. 
+         *    Dock dock1 = new Dock("dock1", "small", "berths", new Crane()/crane); 
+         */
+        // Requriement 6 --> handeling conflicts by adding IsAvalible
+        public void Dock(String name, String size, String dockType, Crane crane, bool IsAvalible=true);
+
+
+       
+
+        // Scenario 3: Initializing a number of docks to harbor
         // kode
         /*  Harbor harbor = new Harbor(DockList, CargoList, ShipList);
             Dock dock = new Dock("dock1", "small", "normal", 3); 
          *  harbor.dockList.append(dock);
          */
-        public void AddDock(Dock dock); 
+        // Perhaps making a method that initiates number of docks in harbor? 
+        public void InitializeDocks(int number, String docktype, Crane crane);
 
-        // Scenario 3: Create cargo
-        public Cargo(String name, double weight);
 
-        // Scenario 4: Create a dock for unloading/loading cargo
-        public Dock(String name, String size, String dockType = "Cargohandlingdock");
 
-        // Scenario 5: Create a queue for waiting ships
-        // gjør det om til en kø etterpå, skal ligge i harbor: 
-        void CreateShipQueue(List<Ship> ShipList);
 
-        // Scenario 6: Create a crane that moves cargo at a certain unloading/loading dock
+        // Scenario 4: Adding the dock to the Harbor: 
+        public void AddDock(Dock dock);
 
-        public Dock(String name, String size, String dockType, int NumberOfCrane);
 
-        //krav 8: venteplass for cargos
 
-        // Scenario 7: Creating a number of spots for cargo to wait
-        public CargoSpot(int number, bool IsAvailable = true);
-        /* Harbor harbor = new Harbor(DockList, CargoList, ShipList, CargoSpotList);
-         * for (int i = 0; i >= number; i++){
-         *     CargoSpot cargo = new CargoSpot("cargo +{i}"); 
+        // not sure whether we need the method to add crane.. adds 
+        public void AddCrane(Crane crane);
+
+
+
+
+        // Scenario 5: Initializing a crane that can transfer cargos from/to ships. 
+        // Requriement 6 --> handeling conflicts by adding IsCraneAvalible
+        public void Crane(bool IsCraneAvalible=true, bool IsCraneOutOfFuntion=false);
+
+
+
+        // Scenario 6: Initializing number of cranes in harbor 
+        // code example: 
+        /* for (int i = 0; i < number; i++){
+         *         foreach(var dock in DockList)
+         *         {
+         *              dock.AddCrane(); 
+         *         }
          * }
          */
+        public void InitializingCranes(int number, List<Dock> DockList);
 
-        // Scenario 8: Legger til cargos i cargospots 
-        // er i harbor klassen 
-        void AddCargoToCargoSpot(Harbor.CargoSpotList, Ship.CargoList);
 
-        // Scenario 9: Creates a ship with name and size
-        // Se over og fjern JSON 
-        public Ship(String name, String model, String size, Boolean docked, List<Cargo> CargoList, List<String> JSONFileList);
 
-        void MoveCargoTo(int range, Harbor.CargoSpotList, crane);
+       
+
+        // Scenario 7: Initializing cargo that can be transfered to/from ship. 
+        public void Cargo(String name, double weight);
+
+
+
+
+
+        // Scenario 8: Create a dock for unloading/loading cargo
+        public void Dock(String name, String size, String dockType = "CargohandlingDock");
+
+
+
+
+        // Scenario 9: Initiate a queue for waiting ships
+        //  
+        void InitiateShipQueue(Queue<HarborSimulator.Ship> ShipQueue);
+
+
+
+
+        // kanskje vi burde fjerne denne? 
+
+        // Scenario 10: Initiate a crane on a dock that moves cargo at a cargoHandelingDock 
+
+        public void Dock(String name, String size, String dockType, Crane crane);
+
+
+
+
+        // Scenario 11: Initiates a ships so that they later can be added to harbor 
+        //dockname does not have to be initiated
+
+        public void Ship(String name, String model, String size, bool HasDocked, List<Cargo> CargoList, List<String> HistoryList, String dockname);
+
+
+
+        // Scenario 12:  Initializing ships in harbor: 
+        // placed in Harbor
+
+        void AddShips(Ship ship, List<Ship> ShipList);
+         
+        
+
 
         //void LoadContainersTo(int range, containerspot);
 
-        // Krav 2
+        // Requriement 2: 
 
-        // Scenario 1: Setting up a sailing
-        public Sailing(DataSetDateTime datatime, Ship ship);
+        // Scenario 1: Setting up a sailing 
+        public void Sailing(UnicodeEncoding id, DataSetDateTime datatime, Ship ship);
         /* 
          */
 
-        // Scenario 2: Setting up a recurring sailing, either daily or weekly
-        void RecurringSailing(Sailing sailing, Boolean weekly, Boolean daily);
 
-        // Krav 3
+        // Scenario 2: Setting up a recurring sailing, either daily or weekly
+        void RecurringSailing(Sailing sailing, Boolean Isweekly, Boolean IsDaily);
+
+
+        // Requirement 3: 
 
         // Scenario 1: Initiates docking for a ship and saves history 
-        void DockAt(Dock dock, DataSetDateTime datatime, SaveShipToJSONFile saveShipToJSONFile);
+        void DockAt(Dock dock, DataSetDateTime datatime, SaveHistory saveShipHistory);
         /* kode eksempel: 
          * if(Ship.size == dock.size){
             If(dock.IsOccupied is false && ship.docked is false)
             {
                 ship.docked = true;
                 dock.IsOccupied = true;
-                fileName = saveShipToJSONFile(ship, dock, datatime); 
+                fileName = saveHistory(ship, dock, datatime); 
                 ship.HistoryList.append(fileName); 
 
             }
@@ -98,34 +163,25 @@ namespace IHarborSimulator
                 queue.append(ship); 
                 }
         }
-        */ 
-        // Krav 4
+        */
 
-        // Scenario 1: Saving ship history to a json file
-        delegate String SaveShipToJSONFile(Ship ship);
 
-        // Scenario 2: Reads ship history from a json file
-        // bruker delegate for å kunne passere metoden som en parameter? 
-        delegate void ReadShipFromJSONFile(String filename);
+        // Requirement 4: Saving history on ships and Cargos
 
-        // Krav 5
+        delegate void SaveHistory(); 
 
-        // Scenario 1: Saving cargo history to a json file
-        delegate void SaveCargoToJSONFile(Cargo cargo);
 
-        // Scenario 2: Reads cargo history from a json file
-        delegate void ReadCargoFromJSONFile(String filename);
-
-        // Krav 6 og krav 9: 
+        // Requirement 6 og requirement 9: 
 
         //Scenario 1: 
-        void AddToQueue(Ship ship, List<Ship> ShipList);
+        void AddToQueue(HarborSimulator.Ship ship, List<HarborSimulator.Ship> ShipList);
 
-        // Krav 7 
+
+        // Requirement: 7 
 
         //Scenario 1: Measure time elapsed 
         // class for watch to measure time 
-        public Watch(DataSetDateTime datatime);
+        public void Watch(DataSetDateTime datatime);
 
 
         //Scenario 2: Start counting time 
@@ -135,8 +191,29 @@ namespace IHarborSimulator
         delegate void StopCountingTime();
 
         //Scenario 4: measure the time that elapsed  
-        void MeasureTimeElapsed(StartCountingTime startCountingTime, StopCountingTime stopCountingTime); 
+        void MeasureTimeElapsed(StartCountingTime startCountingTime, StopCountingTime stopCountingTime);
 
+
+
+        //Requirement 8: waiting area for cargo
+
+        // Scenario 1: Creating a number of storage facility for cargo to wait
+        /* Code example: 
+         * Harbor harbor = new Harbor(DockList, CargoList, ShipList, CargoSpotList);
+         * for (int i = 0; i >= number; i++){
+         *     CargoStorageFacility = new CargoStorageFacility("cargo +{i}"); 
+         * }
+        */
+
+
+        public void CargoStorageFacility(int number, bool IsAvailable = true);
+
+
+        // Scenario 2: Moving Cargo from/to cargoStorageFacilitys
+        // 
+        void AddCargoToStorage(List<CargoStorageFacility> cargoStorageFacility, List<Cargo> CargoList, Crane crane);
+
+        void MoveCargoToShip(Ship Ship, Dock dock);
 
 
 

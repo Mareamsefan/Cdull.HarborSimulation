@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cdull.HarborSimulation
 {
-    internal class Dock
+    internal class CargoStorageFacility
     {
-        //
     }
 }
