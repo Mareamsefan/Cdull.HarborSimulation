@@ -1,4 +1,4 @@
-﻿using Cdull.HarborSimulator;
+﻿using Cdull.HarborSimulation;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -102,7 +102,7 @@ namespace Cdull.HarborSimulation
 
         // Scenario 9: Initiate a queue for waiting ships
         //  
-        void InitiateShipQueue(Queue<HarborSimulator.Ship> ShipQueue);
+        void InitiateShipQueue(Queue<Ship> ShipQueue);
 
 
 
@@ -174,7 +174,7 @@ namespace Cdull.HarborSimulation
         // Requirement 6 og requirement 9: 
 
         //Scenario 1: 
-        void AddToQueue(HarborSimulator.Ship ship, List<HarborSimulator.Ship> ShipList);
+        void AddToQueue(Ship ship, List<Ship> ShipList);
 
 
         // Requirement: 7 
