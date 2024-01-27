@@ -1,6 +1,7 @@
 ﻿using Cdull.HarborSimulation;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics.Tracing;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using static Cdull.HarborSimulation.IHarborSimulation;
 
 namespace Cdull.HarborSimulation
 {
@@ -161,35 +163,66 @@ namespace Cdull.HarborSimulation
          * };
          
          */
-        void MoveCargoToShip(Cargo Cargo);
+        void MoveCargoToShip(Cargo Cargo, SaveCargoHistory saveCargoHistory);
 
 
 
         // Requriement 2 and 1: Configuration of sailing and elapsing time when sailing starts
 
-        // Scenario 1: Setting up a sailing 
-        // Code example: 
-        /* watch.startCountingTime +++ */
-        public void Sailing(UnicodeEncoding id, DataSetDateTime datatime, Ship ship, Watch watch);
+        //Scenario 1: Ships can setup a sailing ( isSailing(true); )
+        public void Ship(String name, String model, String size, bool HasDocked, List<Cargo> CargoList,
+            String dockname, bool isSailing);
+
+        // Scenario 2: Setting up a sailing 
+        // Code example:
+        // This method is in class Ship.
+        /*  watch.startCountingTime();
+         *  ship.IsSailing(true);
+         */
+        void Sailing(UnicodeEncoding id, DataSetDateTime datatime, Ship ship, Watch watch);
         /* 
          */
 
-        // Scenario 2: Setting up a recurring sailing, either daily or weekly
+        // Scenario 3: Setting up a recurring sailing, either daily or weekly
         // code example: 
-        
-      
-        void RecurringSailing(Sailing sailing, Boolean Isweekly, Boolean IsDaily);
+        /* This method is also in class Ship. 
+         * if(IsWeekly){
+         *      for(int i = 0; i < 1; i++){
+         *          this.Sailing(); setting up a sailing 1 time in a week 
+         *      }
+         * }
+         * if(IsDaily){
+         *      for(int i = 0; i < 7; i++){
+         *          this.Sailing();  setting up a sailing 7 times in a week 
+         *      }
+         * }
+         * 
+         */
+
+
+        void RecurringSailing(Boolean IsWeekly, Boolean IsDaily);
 
 
         // Requirement 2 and 1: Configuration of docking, stopping time when docking stops and saving Shiphistory.
 
-        // Scenario 1: Initiates docking for a ship and saves history 
-        void DockAt(Dock dock, DataSetDateTime datatime, Watch watch);
+
+        //Scenario 1: Checks if dock with the required size is available.  
+        delegate void CheckIfDockAvailable(bool IsAvailable, String size);
+        /*foreach(dock in DockList){
+         *     if (dock.size == size && IsAvailable)
+         *          return True
+         *     else 
+         *          return False
+         *  }
+         */
+
+        // Scenario 2: Initiates docking for a ship and saves history 
+        void DockAt(Dock dock, DataSetDateTime datatime, Watch watch, CheckIfDockAvailable 
+            checkIfDockAvailable);
         /* kode eksempel: 
-         * if(Ship.size == dock.size){
-            If(dock.IsOccupied is false && ship.docked is false)
-            {
-                ship.docked = true;
+         * if checkIfDockAvailable(
+            {  
+                this.docked = true;
                 dock.IsOccupied = true;
                 watch.StopCountingTime(); 
                 watch.MeasureTimeElapsed(); 
@@ -199,57 +232,90 @@ namespace Cdull.HarborSimulation
 
             }
             else {
-                queue.append(ship); 
+                harbor.queue.append(ship); 
                 }
         }
         */
 
 
-        // Requirement 4: Saving and collecting ship history: 
-        // code exapmple
+
+
+        // Requirement 4: Saving and collecting ship history:
+
+        // Scenario 1: Collecting and saving history of where the ship docked 
+        // code example: 
         delegate void SaveShipHistory();
 
+
+        //Scenario 2: Saving history of where the ship docked in class ship
         public void Ship(String name, String model, String size, bool HasDocked, List<Cargo> CargoList, List<String> HistoryList, String dockname);
+
+
+
 
         // Requirement 5: Saving and collecting cargo history: 
 
+        // Scenario 1: Collecting and saving history of which ship the cargo was on
 
         delegate void SaveCargoHistory();
-        // to collect history of Cargo, just use the get method for 
-        // Scenario 7: Initializing cargo that can be transfered to/from ship. 
+        // void MoveCargoToShip(Cargo Cargo, SaveCargoHistory saveCargoHistory);
+
+        // Scenario 2: Saving history of which ship the cargo was on
         public void Cargo(String name, double weight, List<String> HistoryList);
 
-        // Requirement 6 og requirement 9: 
+
+
+        // Requirement 6 og requirement 9: Configuration 
 
         //Scenario 1: 
-        void AddToQueue(Ship ship, List<Ship> ShipList);
+        void AddToQueue(Ship ship, Queue<Ship> ShipQueue);
 
 
         // Requirement: 7 
 
         //Scenario 1: Measure time elapsed 
         // class for watch to measure time 
-        public void Watch(DataSetDateTime datatime);
+        public void Watch(DataSetDateTime startTime, DataSetDateTime stopTime, bool IsCounting);
 
 
         //Scenario 2: Start counting time 
-        delegate void StartCountingTime();
+        //Code example: 
+        /* if (!IsCounting){
+                sartTime = DateTime.Now; 
+                IsCounting = true; 
+        } else{
+              console.writeline("time is already counting")
+        }*/
+
+         void StartCountingTime();
+
+
+
 
         //Scenario 3: Stop counting time 
-        delegate void StopCountingTime();
+        //Code example: 
+        /* if (IsCounting){
+                sartTime = DateTime.Now; 
+                IsCounting = false; 
+        } else{
+              console.writeline("time is currently not counting")
+        }*/
+         void StopCountingTime();
 
-        //Scenario 4: measure the time that elapsed  
-        delegate void MeasureTimeElapsed(StartCountingTime startCountingTime, StopCountingTime stopCountingTime);
+
+        //Scenario 4: measure the time that elapsed
+        //Code example:
+        // is in class watch
+        /* Timespan elapsedTime = this.stopTime - this.startTime; 
+         * return elapsedTime; 
+         */
+         DateTime MeasureTimeElapsed();
 
 
 
        
 
 
-      
-
-
-      
 
 
 
